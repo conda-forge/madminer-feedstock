@@ -1,12 +1,13 @@
 {% set name = "madminer" %}
 {% set version = "0.9.6" %}
+{% set python_min = "3.8" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/madminer-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/madminer-{{ version }}.tar.gz
   sha256: 17eedd09da79db371530336904f248e8cde00032a53e50bbe36cbbb92f1c0939
 
 build:
@@ -15,7 +16,7 @@ build:
   # a noarch is preferred by the conda-forge maintainers
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  number: 1
 
 requirements:
   # Python 3.12+ is not allowed as uproot3_methods fails with
@@ -23,10 +24,11 @@ requirements:
   # uproot3 and uproot3-methods are deprecated, so these should be removed
   # in the future.
   host:
-    - python >=3.8,<3.12
+    - python {{ python_min }}
+    - setuptools
     - pip
   run:
-    - python >=3.8,<3.12
+    - python >={{ python_min }},<3.12
     - h5py
     - matplotlib-base >=2.0.0
     - particle >=0.16.0
@@ -44,6 +46,7 @@ test:
     - pip check
   requires:
     - pip
+    - python {{ python_min }}
 
 about:
   home: https://github.com/madminer-tool/madminer
